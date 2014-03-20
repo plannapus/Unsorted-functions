@@ -10,26 +10,19 @@
 getPangeaData <-
 function(DOI){		
 	require(XML)
-	as.character(DOI)->DOI
-	URLencode(paste("http://doi.pangaea.de/",DOI,sep=""))->doi.url
-	URLencode(paste("http://doi.pangaea.de/",DOI,"?format=textfile",sep=""))->dl
-	readLines(doi.url)->p
-	options(warn=-1)
-	p[grep("description",p)][1]->p1
-	gsub("<meta name=\"description\" content=\"","",p1)->p1
-	strsplit(p1,", Supplement to: ")[[1]]->p1
-	strsplit(p1[1]," doi:")[[1]][1]->p1[1]
-	strsplit(p1[2],", doi:")[[1]][1]->p1[2]
-	c(p1,DOI)->p1
-	names(p1)<-c("Dataset name:", "Supplement to:", "DOI:")
+	DOI <- as.character(DOI)
+	doi.url <- URLencode(paste("http://doi.pangaea.de/",DOI,sep=""))
+	dl <- URLencode(paste("http://doi.pangaea.de/",DOI,"?format=textfile",sep=""))
+	p <- readLines(doi.url)
+	title <- strsplit(grep("<meta name=\"title\"",p,value=TRUE),"\"")[[1]][4]
+	author <- strsplit(grep("<meta name=\"author\"",p,value=TRUE),"\"")[[1]][4]
+	date <- as.Date(strsplit(grep("<meta name=\"date\"",p,value=TRUE),"\"")[[1]][4])
+	source <- gsub("^In Supplement to: ","",strsplit(grep("<meta name=\"DC.source\"",p,value=TRUE),"\"")[[1]][4])
+	p1 <- c(paste(author, " (",format(date,"%Y"),") ", title,sep=""), source, DOI)
+	names(p1)<-c("Dataset title","Supplement to:", "DOI:")
 	readHTMLTable(p[grep("Parameter",p):tail(grep("/table",p),1)])[[1]]->params
-	url(dl)->f
-	readLines(f)->g
-	(1:length(g))[g=="*/"]->metaskip
-	strsplit(g[metaskip+1],split="\t",perl=TRUE)[[1]]->cn
-	read.table(f,header=FALSE,sep="\t",skip=metaskip+1)->result
-	colnames(result)<-cn
-	res<-list(Citation=p1,Parameters=params,Dataset=result)
-	options(warn=0)
-	return(res)
+	g <- readLines(dl)
+	metaskip <- (1:length(g))[g=="*/"]
+	tab <- read.table(dl,sep="\t",skip=metaskip,header=TRUE,check.names=FALSE)
+	list(Citation=p1,Parameters=params,Dataset=tab)
 	}
