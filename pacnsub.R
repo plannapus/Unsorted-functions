@@ -156,7 +156,7 @@ pacnsub <- function(id, age_id, sample_id,
 		q <- quotas[1]
 		sp_sqs <- array(NA,dim=c(trials,nb))
 		rt_sqs <- ext_sqs <- orig_sqs <- array(NA,dim=c(trials,nb))
-		for(t in trials){
+		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
 				pool <- occbinned[[i]]
@@ -192,7 +192,7 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("UW"%in%method){
 		q <- quotas[2]
-		for(t in trials){
+		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
 				pool <- collbinned[[i]]
@@ -224,7 +224,7 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("OW"%in%method){
 		q <- quotas[3]
-		for(t in trials){
+		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
 				pool <- collbinned[[i]]
@@ -257,7 +257,7 @@ pacnsub <- function(id, age_id, sample_id,
 	if("O2W"%in%method){
 		q <- quotas[4]
 		occ2 <- sapply(collbinned,function(x)sum(sapply(x,function(y)sum(sample_id==y)^2)))
-		for(t in trials){
+		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
 				pool <- collbinned[[i]]
@@ -289,7 +289,7 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("CR"%in%method){
 		q <- quotas[5]
-		for(t in trials){
+		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
 				if(q <= nocc[i]){
