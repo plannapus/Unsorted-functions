@@ -2,7 +2,7 @@ plot.localizer<-function(file=file.choose()){
 	cat("Choose the file to proceed:\n")
 	gsub("\\\\ ","\\ ",file)->file
 	gsub("^\\ +||| +$", "", file)->file
-	if(length(grep("[pP][nN][gG]",file))!=0){
+	if(grepl("[pP][nN][gG]",file)){
 		require(png)
 		img <- readPNG(file)
 		as.raster(img)->img
@@ -11,7 +11,7 @@ plot.localizer<-function(file=file.choose()){
 		plot(NA,NA,type="n",xlim=c(1,ncol(img)),ylim=c(1,nrow(img)), asp=1, axes=FALSE,xlab="",ylab="")
 		rasterImage(img,1,1,ncol(img),nrow(img))
 		}
-	if(length(grep("[jJ][pP][eE]?[gG]",file))!=0){
+	if(grepl("[jJ][pP][eE]?[gG]",file)){
 		require(ReadImages)
 		img <- read.jpeg(file)
 		quartz(title=gsub(".[jJ][pP][eE]?[gG]","",file), width=ncol(img)/100, height=nrow(img)/100)
