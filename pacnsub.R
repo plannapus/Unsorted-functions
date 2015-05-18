@@ -192,6 +192,8 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("UW"%in%method){
 		q <- quotas[2]
+		sp_uw <- array(NA,dim=c(trials,nb))
+		rt_uw <- ext_uw <- orig_uw <- array(NA,dim=c(trials,nb))
 		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
@@ -209,8 +211,8 @@ pacnsub <- function(id, age_id, sample_id,
 						}
 					}
 				}
-			uw <- crossers(seen)
-			sp_uw[t,] <- rowSums(seen)
+			uw <- crossers(seen,nb)
+			sp_uw[t,] <- colSums(seen)
 			rt_uw[t,] <- rangethrough(uw, rt_method)
 			r <- rate(seen,nb,rate_method)
 			ext_uw[t,] <- r$E
@@ -224,6 +226,8 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("OW"%in%method){
 		q <- quotas[3]
+		sp_ow <- array(NA,dim=c(trials,nb))
+		rt_ow <- ext_ow <- orig_ow <- array(NA,dim=c(trials,nb))
 		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
@@ -241,8 +245,8 @@ pacnsub <- function(id, age_id, sample_id,
 						}
 					}
 				}
-			ow <- crossers(seen)
-			sp_ow[t,] <- rowSums(seen)
+			ow <- crossers(seen,nb)
+			sp_ow[t,] <- colSums(seen)
 			rt_ow[t,] <- rangethrough(ow, rt_method)
 			r <- rate(seen,nb,rate_method)
 			ext_ow[t,] <- r$E
@@ -256,6 +260,8 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("O2W"%in%method){
 		q <- quotas[4]
+		sp_o2w <- array(NA,dim=c(trials,nb))
+		rt_o2w <- ext_o2w <- orig_o2w <- array(NA,dim=c(trials,nb))
 		occ2 <- sapply(collbinned,function(x)sum(sapply(x,function(y)sum(sample_id==y)^2)))
 		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
@@ -274,8 +280,8 @@ pacnsub <- function(id, age_id, sample_id,
 						}
 					}
 				}
-			o2w <- crossers(seen)
-			sp_o2w[t,] <- rowSums(seen)
+			o2w <- crossers(seen,nb)
+			sp_o2w[t,] <- colSums(seen)
 			rt_o2w[t,] <- rangethrough(o2w, rt_method)
 			r <- rate(seen,nb,rate_method)
 			ext_o2w[t,] <- r$E
@@ -289,6 +295,8 @@ pacnsub <- function(id, age_id, sample_id,
 		
 	if("CR"%in%method){
 		q <- quotas[5]
+		sp_cr <- array(NA,dim=c(trials,nb))
+		rt_cr <- ext_cr <- orig_cr <- array(NA,dim=c(trials,nb))
 		for(t in 1:trials){
 			seen <- array(0,dim=c(nsp,nb))
 			for(i in seq_len(nb)){
@@ -296,8 +304,8 @@ pacnsub <- function(id, age_id, sample_id,
 					seen[factor(sample(occbinned[[i]],q),sp),i] <- 1
 					}
 				}
-			cr <- crossers(seen)
-			sp_cr[t,] <- rowSums(seen)
+			cr <- crossers(seen,nb)
+			sp_cr[t,] <- colSums(seen)
 			rt_cr[t,] <- rangethrough(cr, rt_method)
 			r <- rate(seen,nb,rate_method)
 			ext_cr[t,] <- r$E
