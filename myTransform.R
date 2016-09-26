@@ -1,6 +1,6 @@
 myTransform<-function (x, CRSobj, ...){
 	#same as spTransform but does not throw error if points unprojectable: it deletes them instead and cut the lines if needed.
-	if(class(res)!="SpatialLinesDataFrame") stop("Only implemented for SpatialLinesDataFrame so far.")
+	if(class(x)!="SpatialLinesDataFrame") stop("Only implemented for SpatialLinesDataFrame so far.")
     xSP <- as(x, "SpatialLines")
     xDF <- as(x, "data.frame")
     from_args <- proj4string(xSP)
