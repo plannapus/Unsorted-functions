@@ -1,6 +1,6 @@
 myTransform<-function (x, CRSobj, ...){
-	#same as spTransform but does not throw error if points unprojectable: it deletes them instead and cut the lines if needed.
-	if(class(x)!="SpatialLinesDataFrame") stop("Only implemented for SpatialLinesDataFrame so far.")
+    #same as spTransform but does not throw error if points unprojectable: it deletes them instead and cut the lines if needed.
+    if(class(x)!="SpatialLinesDataFrame") stop("Only implemented for SpatialLinesDataFrame so far.")
     xSP <- as(x, "SpatialLines")
     xDF <- as(x, "data.frame")
     from_args <- proj4string(xSP)
@@ -16,8 +16,8 @@ myTransform<-function (x, CRSobj, ...){
     	for (j in 1:n){
     		crds <- slot(inSP[[j]], "coords")
     		m <- nrow(crds)
-   			attr(m, "ob_tran") <- 0L
-   			res <- .Call("transform", from_args, to_args, m, as.double(crds[,1]), as.double(crds[, 2]), NULL, PACKAGE = "rgdal")
+   		attr(m, "ob_tran") <- 0L
+   		res <- .Call("transform", from_args, to_args, m, as.double(crds[,1]), as.double(crds[, 2]), NULL, PACKAGE = "rgdal")
         	crds <- cbind(res[[1]], res[[2]])
         	crds[!is.finite(crds)]<-NA
         	if(all(is.na(crds))){
@@ -40,8 +40,7 @@ myTransform<-function (x, CRSobj, ...){
     }
     na <- sapply(output,length)!=0
     output <- output[na]
-    xDF <- xDF[na,]
+    xDF <- xDF[na,,drop=FALSE]
     resSP <- SpatialLines(output, proj4string = CRS(to_args))
-    res <- SpatialLinesDataFrame(sl = resSP, data = xDF, match.ID = FALSE)
-    res
+    SpatialLinesDataFrame(sl = resSP, data = xDF, match.ID = FALSE)
 }
