@@ -46,16 +46,16 @@ pacnsub <- function(id, age_id, sample_id,
 	if(!missing(seed)) set.seed(seed)
 	
 	rangethrough<-function(x, rtm){
-		if(rtm=="bc"){
-			return(((x$bL+x$bt)+(x$Ft+x$bt))/2)
-			}else if(rtm=="rt"){
-			return(x$bL+x$bt+x$Ft)
-			}else if(rtm=="tot"){
-			return(x$bL+x$bt+x$Ft+x$FL)
-			}else{
-			stop("Argument rt_method accept only three methods:\nbc : Standing mean diversity based on boundary-crossers\nrt : Classic range-through excluding singletons\ntot : Classic range-through including singletons")
-			}
-		}
+	  if(rtm=="bc"){
+	    return(mean(x$bL+x$bt,x$Ft+x$bt,na.rm=TRUE))
+	  }else if(rtm=="rt"){
+	    return(x$bL+x$bt+x$Ft)
+	  }else if(rtm=="tot"){
+	    return(x$bL+x$bt+x$Ft+x$FL)
+	  }else{
+	    stop("Argument rt_method accept only three methods:\nbc : Standing mean diversity based on boundary-crossers\nrt : Classic range-through excluding singletons\ntot : Classic range-through including singletons")
+	  }
+	}
 	
 	crossers <- function(sib,nb){
 		bL<-bt<-Ft<-FL<-numeric(nb)
