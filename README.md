@@ -8,4 +8,6 @@ This repo contains various, unrelated functions I wrote.
 
 `plot.digitizer.R` is a script to digitize data points from a publication figure;   
 
-`sample.depth.R` computes the depth of a DSDP or ODP sample based on its name.
+`sample.depth.R` computes the depth of a DSDP or ODP sample based on its name;
+
+`nsb.jl` is a script in julia containing functions and examples to connect and uses the NSB database. Those functions are meant to produce the exact same results as their counterpart in package [NSBcompanion](http://github.com/plannapus/NSBcompanion).
