@@ -28,7 +28,7 @@ end
 
 # Linear Sedimentation Rates
 function lsr(con, hole_id, mbsf=nothing)
-    nam = DataFrame(execute(con,"SELECT b.depth_mbsf, b.age_ma FROM neptune_hole_summary as a, neptune_age_model as b, neptune_age_model_history as c WHERE a.site_hole=b.site_hole AND b.site_hole=c.site_hole AND b.revision_no=c.revision_no AND c.current_flag='Y' AND a.hole_id='$hole_id' ORDER BY b.depth_mbsf, b.age_ma;"))
+    nam = DataFrame(execute(con, "SELECT b.depth_mbsf, b.age_ma FROM neptune_hole_summary as a, neptune_age_model as b, neptune_age_model_history as c WHERE a.site_hole=b.site_hole AND b.site_hole=c.site_hole AND b.revision_no=c.revision_no AND c.current_flag='Y' AND a.hole_id='$hole_id' ORDER BY b.depth_mbsf, b.age_ma;"))
     depth = map(Float64,nam.depth_mbsf)
     age = map(Float64,nam.age_ma)
     from = depth[1:(end-1)]
@@ -41,7 +41,7 @@ function lsr(con, hole_id, mbsf=nothing)
     elseif mbsf > depth[end] || mbsf < depth[1]
         return missing
     else
-        return df.lsr[(mbsf .>= df.from) .& (mbsf .<= df.to)]
+        return df.lsr[(mbsf .>= df.from) .& (mbsf .<= df.to)][1]
     end
 end
 
@@ -58,3 +58,6 @@ lsr_table = lsr(nsb,"120_748B")
 
 # Compute the LSR at depth 60
 lsr_at_60 = lsr(nsb,"120_748B",60)
+
+# Broadcasting the latter to the "depths" vector
+lsr.(nsb,"120_748B",depths)
